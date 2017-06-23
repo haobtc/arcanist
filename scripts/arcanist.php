@@ -281,6 +281,23 @@ try {
     HTTPSFuture::setGlobalCABundleFromPath($ca_bundle);
   }
 
+  // Apply global user cert from configs.
+  $user_cert = $configuration_manager->getConfigFromAnySource('https.user-cert');
+  if ($user_cert) {
+    $user_cert = Filesystem::resolvePath(
+      $user_cert, $working_copy->getProjectRoot());
+    HTTPSFuture::setGlobalUserCertFromPath($user_cert);
+  }
+
+  // Apply global user key from configs.
+  $user_key = $configuration_manager->getConfigFromAnySource('https.user-key');
+  if ($user_key) {
+    $user_key = Filesystem::resolvePath(
+      $user_key, $working_copy->getProjectRoot());
+    HTTPSFuture::setGlobalUserKeyFromPath($user_key);
+  }
+
+
   $blind_key = 'https.blindly-trust-domains';
   $blind_trust = $configuration_manager->getConfigFromAnySource($blind_key);
   if ($blind_trust) {
